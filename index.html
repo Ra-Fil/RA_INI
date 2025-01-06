@@ -14,6 +14,17 @@
     </form>
     <p id="status"></p>
 
+<script>  
+    const response = await fetch('https://ra-ini.onrender.com', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ keyword })
+    });
+</script>
+
+    
     <script>
         document.getElementById('scraper-form').addEventListener('submit', async function(e) {
             e.preventDefault();
