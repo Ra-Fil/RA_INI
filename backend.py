@@ -4,6 +4,10 @@ import requests
 import json
 import os
 
+from flask_cors import CORS
+
+CORS(app)
+
 app = Flask(__name__)
 
 @app.route('/scrape', methods=['POST'])
