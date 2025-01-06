@@ -7,12 +7,17 @@
 </head>
 <body>
     <h1>Google Scraper Tool</h1>
+    
     <form id="scraper-form">
         <label for="keyword">Enter Keyword or Phrase:</label>
         <input type="text" id="keyword" name="keyword" required>
         <button type="submit">Scrape</button>
     </form>
     <p id="status"></p>
+
+        <div id="download-container" style="display: none;">
+    <a id="download-btn">Download CSV</a>
+</div>
 
 <script>
 document.getElementById('scraper-form').addEventListener('submit', async function(e) {
