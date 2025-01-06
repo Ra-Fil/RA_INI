@@ -7,6 +7,7 @@ CORS(app)
 from bs4 import BeautifulSoup
 import requests
 import json
+import csv
 import os
 
 @app.route('/scrape', methods=['POST'])
