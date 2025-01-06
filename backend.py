@@ -38,11 +38,15 @@ def scrape_google():
             'snippet': snippet
         })
 
-    file_path = 'results.json'
-    with open(file_path, 'w', encoding='utf-8') as f:
-        json.dump(results, f, ensure_ascii=False, indent=4)
+//Formát stažení
+file_path = 'results.csv'
+with open(file_path, 'w', encoding='utf-8', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['Title', 'Link', 'Snippet'])  # Hlavička CSV
+    for result in results:
+        writer.writerow([result['title'], result['link'], result['snippet']])
+    
 
-    return send_file(file_path, as_attachment=True)
 
 
     
