@@ -7,6 +7,7 @@ CORS(app)
 from bs4 import BeautifulSoup
 import requests
 import csv
+import json
 import os
 
 app = Flask(__name__)
