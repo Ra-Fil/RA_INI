@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Scraper Tool</title>
+</head>
+<body>
+    <h1>Google Scraper Tool</h1>
+    <form id="scraper-form">
+        <label for="keyword">Enter Keyword or Phrase:</label>
+        <input type="text" id="keyword" name="keyword" required>
+        <button type="submit">Scrape</button>
+    </form>
+    <p id="status"></p>
+
+    <script>
+        document.getElementById('scraper-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const keyword = document.getElementById('keyword').value;
+            document.getElementById('status').innerText = 'Scraping in progress...';
+
+            try {
+                const response = await fetch('/scrape', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ keyword })
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'results.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    document.getElementById('status').innerText = 'Scraping complete. File downloaded.';
+                } else {
+                    document.getElementById('status').innerText = 'Scraping failed. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('status').innerText = 'An error occurred. Please try again later.';
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
