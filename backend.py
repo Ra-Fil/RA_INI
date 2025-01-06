@@ -9,6 +9,9 @@ import requests
 import csv
 import os
 
+app = Flask(__name__)
+CORS(app)
+
 @app.route('/scrape', methods=['POST'])
 def scrape_google():
     data = request.get_json()
