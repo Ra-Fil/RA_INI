@@ -43,13 +43,16 @@ def scrape_google():
         })
 
 
-file_path = 'results.csv'
-with open(file_path, 'w', encoding='utf-8', newline='') as csvfile:
-    writer = csv.writer(csvfile)
-    writer.writerow(['Title', 'Link', 'Snippet'])  # Hlavička CSV
-    for result in results:
-        writer.writerow([result['title'], result['link'], result['snippet']])
-    
+
+# Vytvoření CSV souboru
+    file_path = 'results.csv'
+    with open(file_path, 'w', encoding='utf-8', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Title', 'Link', 'Snippet'])
+        for result in results:
+            writer.writerow([result['title'], result['link'], result['snippet']])
+
+    return send_file(file_path, as_attachment=True)
     
     import os
 
