@@ -50,3 +50,7 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+@app.route('/', methods=['GET'])
+def home():
+    return "Vítej na Google Scraper API. Use the /scrape endpoint to get results."
