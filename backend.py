@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, send_file
 from bs4 import BeautifulSoup
 import requests
 import json
-import os
 
 app = Flask(__name__)
 
@@ -38,6 +37,14 @@ def scrape_google():
     file_path = 'results.json'
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(results, f, ensure_ascii=False, indent=4)
+
+
+    import os
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
+
 
     return send_file(file_path, as_attachment=True)
 
