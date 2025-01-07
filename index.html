@@ -73,6 +73,21 @@
         document.getElementById('status').innerText = 'A jeeeje, asi mi to nefunguje. Zkus to později.';
     }
 });
+
+try {
+    const text = await blob.text();
+    const results = JSON.parse(text); // Převede odpověď na JSON
+    console.log('Results:', results); // Výpis pro ladění
+} catch (error) {
+    console.error('Failed to parse JSON:', error);
+    document.getElementById('status').innerText = 'Chyba při zpracování výsledků. Zkus to prosím znovu.';
+    return; // Ukončí funkci, pokud dojde k chybě
+}
+
+
+const text = await blob.text();
+console.log('Response text:', text); // Výpis odpovědi z backendu
+    
     
 </script>
 
