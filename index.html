@@ -6,56 +6,6 @@
     <title>Můj první Google vyhledávač</title>
 </head>
 <body>
-    <h1>Google vyhledávač</h1>
-    
-    <form id="scraper-form">
-        <label for="keyword">Sem zadej klíčové slovo nebo frázi:</label>
-        <input type="text" id="keyword" name="keyword" required>
-        <button type="submit">Vyhledej</button>
-    </form>
-    <p id="status"></p>
-
-<div id="download-container" style="display: none;">
-     <button id="download-btn">Stáhnout CSV</button>
-</div>
-  
-<script>
-    document.getElementById('scraper-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const keyword = document.getElementById('keyword').value;
-        document.getElementById('status').innerText = 'Už se to hledá...';
-        document.getElementById('download-container').style.display = 'none';
-
-        try {
-            const response = await fetch('https://ra-ini.onrender.com/scrape', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ keyword })
-            });
-
-            if (response.ok) {
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const downloadBtn = document.getElementById('download-btn');
-                downloadBtn.href = url;
-                downloadBtn.download = 'results.csv';
-                document.getElementById('download-container').style.display = 'block';
-                document.getElementById('status').innerText = 'Vyhledávání dokončeno :) Pokud chceš data uložit ve formátu CSV do svého počítače, klikni na tlačítko.';
-            } else {
-                document.getElementById('status').innerText = 'Chybička se vloudila, zkus to prosím znovu.';
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            document.getElementById('status').innerText = 'A jeeeje, asi mi to nefunguje. Zkus to později.';
-        }
-    });
-</script>
-
-
-
-
 
     <h1>Google Scraper Tool</h1>
     <form id="scraper-form">
