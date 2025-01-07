@@ -13,6 +13,10 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/', methods=['GET'])
+def home():
+    return "Vítej na Google Scraper API. Use the /scrape endpoint to get results."
+
 @app.route('/scrape', methods=['POST'])
 def scrape_google():
     data = request.get_json()
@@ -63,7 +67,3 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-@app.route('/', methods=['GET'])
-def home():
-    return "Vítej na Google Scraper API. Use the /scrape endpoint to get results."
