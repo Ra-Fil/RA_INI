@@ -21,9 +21,8 @@
     
     <!-- Kontejner pro tlačítko stažení CSV -->
     <div id="download-container" style="display: none; margin-top: 20px;">
-    <a id="download-btn" class="button">Stáhnout CSV</a>
+        <a id="download-btn" class="button">Stáhnout CSV</a>
     </div>
-
 
     <script>
         document.getElementById('scraper-form').addEventListener('submit', async function(e) {
@@ -47,8 +46,8 @@
                     const text = await blob.text();
                     const rows = text.split('\n');
                     const results = rows.slice(1).map(row => row.split(','));
-                    
-// Vytvoří tabulku pro výsledky
+
+                    // Vytvoří tabulku pro výsledky
                     const resultsContainer = document.getElementById('results-container');
                     const table = document.createElement('table');
                     table.id = 'results-table';
@@ -57,18 +56,18 @@
                         <tr>
                             <th>Název</th>
                             <th>Odkaz</th>
-                            <th>Popisek</th>
+                            <th>Meta popisek</th>
                         </tr>
                     `;
 
                     results.forEach(result => {
                         if (result.length >= 3) {
-                            const [title, link, snippet] = result;
+                            const [title, link, meta_description] = result;
                             const row = document.createElement('tr');
                             row.innerHTML = `
                                 <td>${title}</td>
                                 <td><a href="${link}" target="_blank">${link}</a></td>
-                                <td>${snippet}</td>
+                                <td>${meta_description}</td>
                             `;
                             table.appendChild(row);
                         }
@@ -76,7 +75,7 @@
 
                     resultsContainer.appendChild(table);
 
-// Nastaví URL pro stažení CSV
+                    // Nastaví URL pro stažení CSV
                     const url = window.URL.createObjectURL(blob);
                     const downloadBtn = document.getElementById('download-btn');
                     downloadBtn.href = url;
@@ -95,3 +94,4 @@
 
 </body>
 </html>
+
