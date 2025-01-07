@@ -33,34 +33,23 @@ def scrape_google():
     soup = BeautifulSoup(response.text, 'html.parser')
     results = []
 
-for g in soup.find_all('div', class_='tF2Cxc'):
-    title = g.find('h3').text if g.find('h3') else 'No title'
-    link = g.find('a')['href'] if g.find('a') else 'No link'
-    meta_description = g.find('span', class_='aCOpRe').text if g.find('span', class_='aCOpRe') else 'NO meta description'
+    for g in soup.find_all('div', class_='tF2Cxc'):
+        title = g.find('h3').text if g.find('h3') else 'No title'
+        link = g.find('a')['href'] if g.find('a') else 'No link'
+        snippet = g.find('span', class_='aCOpRe').text if g.find('span', class_='aCOpRe') else 'No snippet'
+        results.append({
+            'title': title,
+            'link': link,
+            'snippet': snippet
+        })
     
-# Načtení stránky pro získání meta popisku
-    try:
-        page_response = requests.get(link, headers=headers, timeout=5)
-        page_soup = BeautifulSoup(page_response.text, 'html.parser')
-        meta_description = page_soup.find('meta', attrs={'name': 'description'})
-        meta_description = meta_description['content'] if meta_description else 'No meta description'
-    except Exception as e:
-        meta_description = 'Failed to fetch meta description'
-
-    results.append({
-        'title': title,
-        'link': link,
-        'meta_description': meta_description,
-    })
-    
-
 # Vytvoření CSV souboru
     file_path = 'results.csv'
     with open(file_path, 'w', encoding='utf-8', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['Title', 'Link', 'Meta_description'])
+        writer.writerow(['Title', 'Link', 'Snippet'])
         for result in results:
-            writer.writerow([result['title'], result['link'], result['meta_description']])
+            writer.writerow([result['title'], result['link'], result['snippet']])
 
     return send_file(file_path, as_attachment=True)
 
@@ -70,6 +59,3 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-return response.text
