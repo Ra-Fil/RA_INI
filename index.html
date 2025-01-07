@@ -44,16 +44,15 @@
 
                 if (response.ok) {
                     const blob = await response.blob();
-                    const text = await blob.text(); // Převede blob na text
-                    const rows = text.split('\n'); // Rozdělení podle řádků
-                    const results = rows.slice(1).map(row => row.split(',')); // Rozdělení podle čárek a odstranění hlavičky
-
+                    const text = await blob.text();
+                    const rows = text.split('\n');
+                    const results = rows.slice(1).map(row => row.split(','));
+                    
 // Vytvoří tabulku pro výsledky
                     const resultsContainer = document.getElementById('results-container');
                     const table = document.createElement('table');
                     table.id = 'results-table';
 
-// Přidá hlavičku tabulky
                     table.innerHTML = `
                         <tr>
                             <th>Název</th>
@@ -62,7 +61,6 @@
                         </tr>
                     `;
 
-// Přidá řádky tabulky
                     results.forEach(result => {
                         if (result.length >= 3) {
                             const [title, link, snippet] = result;
