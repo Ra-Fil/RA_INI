@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Scraper Tool</title>
+    <title>Můj první Google vyhledávač</title>
 </head>
 <body>
-    <h1>Google Scraper Tool</h1>
+    <h1>Google vyhledávač</h1>
     
     <form id="scraper-form">
-        <label for="keyword">Enter Keyword or Phrase:</label>
+        <label for="keyword">Sem zadej klíčové slovo nebo frázi:</label>
         <input type="text" id="keyword" name="keyword" required>
-        <button type="submit">Scrape</button>
+        <button type="submit">Vyhledej</button>
     </form>
     <p id="status"></p>
 
         <div id="download-container" style="display: none;">
-    <a id="download-btn">Download CSV</a>
+    <a id="download-btn">Stáhnout CSV</a>
 </div>
 
 <script>
@@ -42,13 +42,13 @@
                 downloadBtn.href = url;
                 downloadBtn.download = 'results.csv';
                 document.getElementById('download-container').style.display = 'block';
-                document.getElementById('status').innerText = 'Scraping complete. Click the button to download the file.';
+                document.getElementById('status').innerText = 'Vyhledávání dokončeno :) Pokud chceš data uložit ve formátu CSV do svého počítače, klikni na tlačítko.';
             } else {
-                document.getElementById('status').innerText = 'Scraping failed. Please try again.';
+                document.getElementById('status').innerText = 'Chybička se vloudila, zkus to prosím znovu.';
             }
         } catch (error) {
             console.error('Error:', error);
-            document.getElementById('status').innerText = 'An error occurred. Please try again later.';
+            document.getElementById('status').innerText = 'A jeeeje, asi mi to nefunguje. Zkus to později.';
         }
     });
 </script>
