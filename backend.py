@@ -47,9 +47,9 @@ def scrape_google():
     file_path = 'results.csv'
     with open(file_path, 'w', encoding='utf-8', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['Title', 'Link', 'Snippet'])
+        writer.writerow(['Title', 'Link', 'Meta_description'])
         for result in results:
-            writer.writerow([result['title'], result['link'], result['snippet']])
+            writer.writerow([result['title'], result['link'], result['meta_description']])
 
     return send_file(file_path, as_attachment=True)
 
