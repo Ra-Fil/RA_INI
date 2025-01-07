@@ -36,20 +36,29 @@ def scrape_google():
     for g in soup.find_all('div', class_='tF2Cxc'):
         title = g.find('h3').text if g.find('h3') else 'No title'
         link = g.find('a')['href'] if g.find('a') else 'No link'
-        snippet = g.find('span', class_='aCOpRe').text if g.find('span', class_='aCOpRe') else 'No snippet'
+        
+        # Načtení meta popisku ze samotné stránky
+        try:
+            page_response = requests.get(link, headers=headers, timeout=5)
+            page_soup = BeautifulSoup(page_response.text, 'html.parser')
+            meta_tag = page_soup.find('meta', attrs={'name': 'description'})
+            meta_description = meta_tag['content'] if meta_tag else 'No meta description'
+        except Exception as e:
+            meta_description = 'Failed to fetch meta description'
+
         results.append({
             'title': title,
             'link': link,
-            'snippet': snippet,
+            'meta_description': meta_description
         })
     
-# Vytvoření CSV souboru
+    # Vytvoření CSV souboru
     file_path = 'results.csv'
     with open(file_path, 'w', encoding='utf-8', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['Title', 'Link', 'Snippet'])
+        writer.writerow(['Title', 'Link', 'Meta Description'])
         for result in results:
-            writer.writerow([result['title'], result['link'], result['snippet']])
+            writer.writerow([result['title'], result['link'], result['meta_description']])
 
     return send_file(file_path, as_attachment=True)
 
@@ -57,5 +66,3 @@ if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
 
-if __name__ == '__main__':
-    app.run(debug=True)
