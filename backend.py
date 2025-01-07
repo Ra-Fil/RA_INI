@@ -34,19 +34,15 @@ def scrape_google():
     results = []
 
 for g in soup.find_all('div', class_='tF2Cxc'):
-    title = g.find('h3').text if g.find('h3') else 'No title'
-    link = g.find('a')['href'] if g.find('a') else 'No link'
+        title = g.find('h3').text if g.find('h3') else 'No title'
+        link = g.find('a')['href'] if g.find('a') else 'No link'
+        snippet = g.find('span', class_='aCOpRe').text if g.find('span', class_='aCOpRe') else 'No snippet'
+        results.append({
+            'title': title,
+            'link': link,
+            'snippet': snippet
+        })
     
-    # Získání meta popisku s kontrolou více možných tříd
-    description_element = g.find('span', class_='aCOpRe') or g.find('div', class_='BNeawe s3v9rd AP7Wnd')
-    meta_description = description_element.text if description_element else 'No meta description'
-    
-    results.append({
-        'title': title,
-        'link': link,
-        'meta_description': meta_description
-    })
-
 
 # Vytvoření CSV souboru
     file_path = 'results.csv'
