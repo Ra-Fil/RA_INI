@@ -32,6 +32,6 @@
     text-align: center;
 }
 
-.button:hover {
+#download-btn.button {
     background-color: #0056b3;
 }
