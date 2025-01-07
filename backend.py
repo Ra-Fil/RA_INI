@@ -34,14 +34,25 @@ def scrape_google():
     results = []
 
 for g in soup.find_all('div', class_='tF2Cxc'):
-        title = g.find('h3').text if g.find('h3') else 'No title'
-        link = g.find('a')['href'] if g.find('a') else 'No link'
-        snippet = g.find('span', class_='aCOpRe').text if g.find('span', class_='aCOpRe') else 'No snippet'
-        results.append({
-            'title': title,
-            'link': link,
-            'snippet': snippet
-        })
+    title = g.find('h3').text if g.find('h3') else 'No title'
+    link = g.find('a')['href'] if g.find('a') else 'No link'
+    snippet = g.find('span', class_='aCOpRe').text if g.find('span', class_='aCOpRe') else 'No snippet'
+    
+# Načtení stránky pro získání meta popisku
+    try:
+        page_response = requests.get(link, headers=headers, timeout=5)
+        page_soup = BeautifulSoup(page_response.text, 'html.parser')
+        meta_description = page_soup.find('meta', attrs={'name': 'description'})
+        meta_description = meta_description['content'] if meta_description else 'No meta description'
+    except Exception as e:
+        meta_description = 'Failed to fetch meta description'
+
+    results.append({
+        'title': title,
+        'link': link,
+        'snippet': snippet,
+        'meta_description': meta_description
+    })
     
 
 # Vytvoření CSV souboru
