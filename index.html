@@ -42,20 +42,27 @@
 
         if (response.ok) {
             const blob = await response.blob();
-            const text = await blob.text();
-            const results = JSON.parse(text); // Převede odpověď na JSON
+            const text = await blob.text(); // Převede blob na text
+            console.log('Response text:', text); // Výpis odpovědi pro ladění
+
+            // Zpracování CSV na řádky a sloupce
+            const rows = text.split('\n'); // Rozdělení podle řádků
+            const results = rows.slice(1).map(row => row.split(',')); // Rozdělení podle čárek a odstranění hlavičky
 
             // Vypíše výsledky do kontejneru
             const resultsContainer = document.getElementById('results-container');
             results.forEach(result => {
-                const resultDiv = document.createElement('div');
-                resultDiv.style.marginBottom = '10px';
-                resultDiv.innerHTML = `
-                    <h3>${result.title}</h3>
-                    <p><a href="${result.link}" target="_blank">${result.link}</a></p>
-                    <p>${result.snippet}</p>
-                `;
-                resultsContainer.appendChild(resultDiv);
+                if (result.length >= 3) {
+                    const [title, link, snippet] = result;
+                    const resultDiv = document.createElement('div');
+                    resultDiv.style.marginBottom = '10px';
+                    resultDiv.innerHTML = `
+                        <h3>${title}</h3>
+                        <p><a href="${link}" target="_blank">${link}</a></p>
+                        <p>${snippet}</p>
+                    `;
+                    resultsContainer.appendChild(resultDiv);
+                }
             });
 
             // Nastaví URL pro stažení CSV
@@ -74,21 +81,6 @@
     }
 });
 
-try {
-    const text = await blob.text();
-    const results = JSON.parse(text); // Převede odpověď na JSON
-    console.log('Results:', results); // Výpis pro ladění
-} catch (error) {
-    console.error('Failed to parse JSON:', error);
-    document.getElementById('status').innerText = 'Chyba při zpracování výsledků. Zkus to prosím znovu.';
-    return; // Ukončí funkci, pokud dojde k chybě
-}
-
-
-const text = await blob.text();
-console.log('Response text:', text); // Výpis odpovědi z backendu
-    
-    
 </script>
 
 </body>
