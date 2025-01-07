@@ -30,7 +30,7 @@
             const keyword = document.getElementById('keyword').value;
             document.getElementById('status').innerText = 'Už se to hledá...';
             document.getElementById('download-container').style.display = 'none';
-            document.getElementById('results-container').innerHTML = ''; // Vyčistí předchozí výsledky
+            document.getElementById('results-container').innerHTML = ''; // Čistí předchozí výsledky
 
             try {
                 const response = await fetch('https://ra-ini.onrender.com/scrape', {
@@ -47,12 +47,12 @@
                     const rows = text.split('\n'); // Rozdělení podle řádků
                     const results = rows.slice(1).map(row => row.split(',')); // Rozdělení podle čárek a odstranění hlavičky
 
-                    // Vytvoří tabulku pro výsledky
+// Vytvoří tabulku pro výsledky
                     const resultsContainer = document.getElementById('results-container');
                     const table = document.createElement('table');
                     table.id = 'results-table';
 
-                    // Přidá hlavičku tabulky
+// Přidá hlavičku tabulky
                     table.innerHTML = `
                         <tr>
                             <th>Název</th>
@@ -61,7 +61,7 @@
                         </tr>
                     `;
 
-                    // Přidá řádky tabulky
+// Přidá řádky tabulky
                     results.forEach(result => {
                         if (result.length >= 3) {
                             const [title, link, snippet] = result;
@@ -77,13 +77,13 @@
 
                     resultsContainer.appendChild(table);
 
-                    // Nastaví URL pro stažení CSV
+// Nastaví URL pro stažení CSV
                     const url = window.URL.createObjectURL(blob);
                     const downloadBtn = document.getElementById('download-btn');
                     downloadBtn.href = url;
                     downloadBtn.download = 'results.csv';
                     document.getElementById('download-container').style.display = 'block';
-                    document.getElementById('status').innerText = 'Vyhledávání dokončeno :) Pokud chceš data uložit ve formátu CSV do svého počítače, klikni na tlačítko.';
+                    document.getElementById('status').innerText = 'Vyhledávání dokončeno :) Pokud chceš data uložit ve formátu CSV do svého počítače, klikni na tlačítko pod tabulkou :-)';
                 } else {
                     document.getElementById('status').innerText = 'Chybička se vloudila, zkus to prosím znovu.';
                 }
