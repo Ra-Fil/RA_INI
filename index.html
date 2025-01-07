@@ -15,86 +15,43 @@
     </form>
     <p id="status"></p>
 
-
-
-    
-<form id="scraper-form">
-    <label for="keyword">Sem zadej klíčové slovo nebo frázi:</label>
-    <input type="text" id="keyword" name="keyword" required>
-    <button type="submit">Vyhledej</button>
-</form>
-<p id="status"></p>
-
-<!-- Kontejner pro tlačítko stažení CSV -->
-<div id="download-container" style="display: none; margin-top: 20px;">
-    <a id="download-btn">Stáhnout CSV</a>
-</div>
-
-<!-- Kontejner pro výsledky -->
-<div id="results-container" style="margin-top: 20px;"></div>
-
-
-
-    
-   
         <div id="download-container" style="display: none;">
     <a id="download-btn">Stáhnout CSV</a>
 </div>
 
     
 <script>
-    
-document.getElementById('scraper-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const keyword = document.getElementById('keyword').value;
-    document.getElementById('status').innerText = 'Už se to hledá...';
-    document.getElementById('download-container').style.display = 'none';
-    document.getElementById('results-container').innerHTML = ''; // Vyčistí předchozí výsledky
+    document.getElementById('scraper-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const keyword = document.getElementById('keyword').value;
+        document.getElementById('status').innerText = 'Už se to hledá...';
+        document.getElementById('download-container').style.display = 'none';
 
-    try {
-        const response = await fetch('https://ra-ini.onrender.com/scrape', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ keyword })
-        });
-
-        if (response.ok) {
-            const blob = await response.blob();
-            const text = await blob.text();
-            const results = JSON.parse(text); // Převede odpověď na JSON
-
-            // Vypíše výsledky do kontejneru
-            const resultsContainer = document.getElementById('results-container');
-            results.forEach(result => {
-                const resultDiv = document.createElement('div');
-                resultDiv.style.marginBottom = '10px';
-                resultDiv.innerHTML = `
-                    <h3>${result.title}</h3>
-                    <p><a href="${result.link}" target="_blank">${result.link}</a></p>
-                    <p>${result.snippet}</p>
-                `;
-                resultsContainer.appendChild(resultDiv);
+        try {
+            const response = await fetch('https://ra-ini.onrender.com/scrape', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ keyword })
             });
 
-            // Nastaví URL pro stažení CSV
-            const url = window.URL.createObjectURL(blob);
-            const downloadBtn = document.getElementById('download-btn');
-            downloadBtn.href = url;
-            downloadBtn.download = 'results.csv';
-            document.getElementById('download-container').style.display = 'block';
-            document.getElementById('status').innerText = 'Vyhledávání dokončeno :) Pokud chceš data uložit ve formátu CSV do svého počítače, klikni na tlačítko.';
-        } else {
-            document.getElementById('status').innerText = 'Chybička se vloudila, zkus to prosím znovu.';
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const downloadBtn = document.getElementById('download-btn');
+                downloadBtn.href = url;
+                downloadBtn.download = 'results.csv';
+                document.getElementById('download-container').style.display = 'block';
+                document.getElementById('status').innerText = 'Vyhledávání dokončeno :) Pokud chceš data uložit ve formátu CSV do svého počítače, klikni na tlačítko.';
+            } else {
+                document.getElementById('status').innerText = 'Chybička se vloudila, zkus to prosím znovu.';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('status').innerText = 'A jeeeje, asi mi to nefunguje. Zkus to později.';
         }
-    } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('status').innerText = 'A jeeeje, asi mi to nefunguje. Zkus to později.';
-    }
-});
-
-    
+    });
     
 </script>
 
