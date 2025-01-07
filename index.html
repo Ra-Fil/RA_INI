@@ -53,5 +53,88 @@
     });
 </script>
 
+
+
+
+
+    <h1>Google Scraper Tool</h1>
+    <form id="scraper-form">
+        <label for="keyword">Enter Keyword or Phrase:</label>
+        <input type="text" id="keyword" name="keyword" required>
+        <button type="submit">Scrape</button>
+    </form>
+    <p id="status"></p>
+
+    <!-- Kontejner pro tlačítko stažení CSV -->
+    <div id="download-container" style="display: none; margin-top: 20px;">
+        <button id="download-btn">Download CSV</button>
+    </div>
+
+    <!-- Kontejner pro zobrazení výsledků -->
+    <div id="results-container" style="margin-top: 20px;"></div>
+
+    <script>
+        document.getElementById('scraper-form').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Zabrání standardnímu odeslání formuláře
+            const keyword = document.getElementById('keyword').value;
+            document.getElementById('status').innerText = 'Scraping in progress...';
+            document.getElementById('download-container').style.display = 'none'; // Skryje tlačítko
+            document.getElementById('results-container').innerHTML = ''; // Vyčistí předchozí výsledky
+
+            try {
+                const response = await fetch('https://ra-ini.onrender.com/scrape', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ keyword })
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+
+                    // Čtení výsledků jako text
+                    const text = await blob.text();
+                    const results = JSON.parse(text); // Převede JSON text na objekt
+
+                    // Vypíše výsledky do prohlížeče
+                    const resultsContainer = document.getElementById('results-container');
+                    results.forEach(result => {
+                        const resultDiv = document.createElement('div');
+                        resultDiv.style.marginBottom = '10px';
+                        resultDiv.innerHTML = `
+                            <h3>${result.title}</h3>
+                            <p><a href="${result.link}" target="_blank">${result.link}</a></p>
+                            <p>${result.snippet}</p>
+                        `;
+                        resultsContainer.appendChild(resultDiv);
+                    });
+
+                    // Nastaví URL do tlačítka pro stažení
+                    const downloadBtn = document.getElementById('download-btn');
+                    downloadBtn.onclick = function() {
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'results.csv';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+
+                    document.getElementById('download-container').style.display = 'block'; // Zobrazí tlačítko
+                    document.getElementById('status').innerText = 'Scraping complete. See results below.';
+                } else {
+                    document.getElementById('status').innerText = 'Scraping failed. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('status').innerText = 'An error occurred. Please try again later.';
+            }
+        });
+    </script>
+
+
+    
 </body>
 </html>
