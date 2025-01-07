@@ -12,7 +12,7 @@ import os
 
 @app.route('/', methods=['GET'])
 def home():
-    return "Vítej na Google Scraper API. Use the /scrape endpoint to get results."
+    return "Vítej, tohle je pokus o vyhledávání přes google."
 
 @app.route('/scrape', methods=['POST'])
 def scrape_google():
@@ -52,13 +52,10 @@ def scrape_google():
             writer.writerow([result['title'], result['link'], result['snippet']])
 
     return send_file(file_path, as_attachment=True)
-    
-    import os
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
