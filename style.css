@@ -19,7 +19,7 @@
             margin-top: 20px;
         }
 
-#button {
+.button {
     display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
@@ -32,6 +32,6 @@
     text-align: center;
 }
 
-#button:hover {
+.button:hover {
     background-color: #0056b3;
 }
