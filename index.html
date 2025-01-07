@@ -25,7 +25,7 @@
     
 <script>
     document.getElementById('scraper-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
+    e.preventDefault(); // Zabrání standardnímu odeslání formuláře
     const keyword = document.getElementById('keyword').value;
     document.getElementById('status').innerText = 'Už se to hledá...';
     document.getElementById('download-container').style.display = 'none';
@@ -80,6 +80,7 @@
         document.getElementById('status').innerText = 'A jeeeje, asi mi to nefunguje. Zkus to později.';
     }
 });
+
 
 </script>
 
