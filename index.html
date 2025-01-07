@@ -43,6 +43,21 @@
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 const downloadBtn = document.getElementById('download-btn');
+
+// Vypíše výsledky do kontejneru
+            const resultsContainer = document.getElementById('results-container');
+            results.forEach(result => {
+                const resultDiv = document.createElement('div');
+                resultDiv.style.marginBottom = '10px';
+                resultDiv.innerHTML = `
+                    <h3>${result.title}</h3>
+                    <p><a href="${result.link}" target="_blank">${result.link}</a></p>
+                    <p>${result.snippet}</p>
+                `;
+                resultsContainer.appendChild(resultDiv);
+            });
+
+                
                 downloadBtn.href = url;
                 downloadBtn.download = 'results.csv';
                 document.getElementById('download-container').style.display = 'block';
