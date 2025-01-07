@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Můj první Google vyhledávač</title>
-
-<style>
+    <style>
         #results-table {
             width: 100%;
             border-collapse: collapse;
@@ -27,7 +26,6 @@
             margin-top: 20px;
         }
     </style>
-
 </head>
 <body>
     <h1>Google vyhledávač</h1>
@@ -39,74 +37,83 @@
     </form>
     <p id="status"></p>
 
-        <div id="download-container" style="display: none;">
-    <a id="download-btn">Stáhnout CSV</a>
-</div>
+    <!-- Kontejner pro tlačítko stažení CSV -->
+    <div id="download-container" style="display: none; margin-top: 20px;">
+        <a id="download-btn">Stáhnout CSV</a>
+    </div>
 
-<!-- Kontejner pro výsledky -->
-<div id="results-container" style="margin-top: 20px;"></div>
-    
-    
-<script>
-    document.getElementById('scraper-form').addEventListener('submit', async function(e) {
-    e.preventDefault(); // Zabrání standardnímu odeslání formuláře
-    const keyword = document.getElementById('keyword').value;
-    document.getElementById('status').innerText = 'Už se to hledá...';
-    document.getElementById('download-container').style.display = 'none';
-    document.getElementById('results-container').innerHTML = ''; // Vyčistí předchozí výsledky
+    <!-- Kontejner pro výsledky -->
+    <div id="results-container"></div>
 
-    try {
-        const response = await fetch('https://ra-ini.onrender.com/scrape', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ keyword })
-        });
+    <script>
+        document.getElementById('scraper-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const keyword = document.getElementById('keyword').value;
+            document.getElementById('status').innerText = 'Už se to hledá...';
+            document.getElementById('download-container').style.display = 'none';
+            document.getElementById('results-container').innerHTML = ''; // Vyčistí předchozí výsledky
 
-        if (response.ok) {
-            const blob = await response.blob();
-            const text = await blob.text(); // Převede blob na text
-            console.log('Response text:', text); // Výpis odpovědi pro ladění
+            try {
+                const response = await fetch('https://ra-ini.onrender.com/scrape', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ keyword })
+                });
 
-            // Zpracování CSV na řádky a sloupce
-            const rows = text.split('\n'); // Rozdělení podle řádků
-            const results = rows.slice(1).map(row => row.split(',')); // Rozdělení podle čárek a odstranění hlavičky
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const text = await blob.text(); // Převede blob na text
+                    const rows = text.split('\n'); // Rozdělení podle řádků
+                    const results = rows.slice(1).map(row => row.split(',')); // Rozdělení podle čárek a odstranění hlavičky
 
-            // Vypíše výsledky do kontejneru
-            const resultsContainer = document.getElementById('results-container');
-            results.forEach(result => {
-                if (result.length >= 3) {
-                    const [title, link, snippet] = result;
-                    const resultDiv = document.createElement('div');
-                    resultDiv.style.marginBottom = '10px';
-                    resultDiv.innerHTML = `
-                        <h3>${title}</h3>
-                        <p><a href="${link}" target="_blank">${link}</a></p>
-                        <p>${snippet}</p>
+                    // Vytvoří tabulku pro výsledky
+                    const resultsContainer = document.getElementById('results-container');
+                    const table = document.createElement('table');
+                    table.id = 'results-table';
+
+                    // Přidá hlavičku tabulky
+                    table.innerHTML = `
+                        <tr>
+                            <th>Název</th>
+                            <th>Odkaz</th>
+                            <th>Popis</th>
+                        </tr>
                     `;
-                    resultsContainer.appendChild(resultDiv);
+
+                    // Přidá řádky tabulky
+                    results.forEach(result => {
+                        if (result.length >= 3) {
+                            const [title, link, snippet] = result;
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${title}</td>
+                                <td><a href="${link}" target="_blank">${link}</a></td>
+                                <td>${snippet}</td>
+                            `;
+                            table.appendChild(row);
+                        }
+                    });
+
+                    resultsContainer.appendChild(table);
+
+                    // Nastaví URL pro stažení CSV
+                    const url = window.URL.createObjectURL(blob);
+                    const downloadBtn = document.getElementById('download-btn');
+                    downloadBtn.href = url;
+                    downloadBtn.download = 'results.csv';
+                    document.getElementById('download-container').style.display = 'block';
+                    document.getElementById('status').innerText = 'Vyhledávání dokončeno :) Pokud chceš data uložit ve formátu CSV do svého počítače, klikni na tlačítko.';
+                } else {
+                    document.getElementById('status').innerText = 'Chybička se vloudila, zkus to prosím znovu.';
                 }
-            });
-
-            // Nastaví URL pro stažení CSV
-            const url = window.URL.createObjectURL(blob);
-            const downloadBtn = document.getElementById('download-btn');
-            downloadBtn.href = url;
-            downloadBtn.download = 'results.csv';
-            document.getElementById('download-container').style.display = 'block';
-            document.getElementById('status').innerText = 'Vyhledávání dokončeno :) Pokud chceš data uložit ve formátu CSV do svého počítače, klikni na tlačítko.';
-        } else {
-            document.getElementById('status').innerText = 'Chybička se vloudila, zkus to prosím znovu.';
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('status').innerText = 'A jeeeje, asi mi to nefunguje. Zkus to později.';
-    }
-});
-
-
-</script>
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('status').innerText = 'A jeeeje, asi mi to nefunguje. Zkus to později.';
+            }
+        });
+    </script>
 
 </body>
 </html>
