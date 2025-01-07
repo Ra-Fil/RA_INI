@@ -19,7 +19,7 @@
             margin-top: 20px;
         }
 
-.downland-container {
+#download-btn.button {
     display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
