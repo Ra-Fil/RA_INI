@@ -19,7 +19,6 @@
     <a id="download-btn">Stáhnout CSV</a>
 </div>
 
-<div id="results-container" style="margin-top: 20px;"></div>
     
 <script>
     document.getElementById('scraper-form').addEventListener('submit', async function(e) {
@@ -53,18 +52,6 @@
             document.getElementById('status').innerText = 'A jeeeje, asi mi to nefunguje. Zkus to později.';
         }
     });
-
-
-results.forEach(result => {
-    const resultDiv = document.createElement('div');
-    resultDiv.style.marginBottom = '10px';
-    resultDiv.innerHTML = `
-        <h3>${result.title}</h3>
-        <p><a href="${result.link}" target="_blank">${result.link}</a></p>
-        <p>${result.snippet}</p>
-    `;
-    resultsContainer.appendChild(resultDiv);
-});
     
 </script>
 
