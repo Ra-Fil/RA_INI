@@ -10,9 +10,6 @@ import csv
 import json
 import os
 
-app = Flask(__name__)
-CORS(app)
-
 @app.route('/', methods=['GET'])
 def home():
     return "Vítej na Google Scraper API. Use the /scrape endpoint to get results."
@@ -45,8 +42,6 @@ def scrape_google():
             'link': link,
             'snippet': snippet
         })
-
-
 
 # Vytvoření CSV souboru
     file_path = 'results.csv'
