@@ -30,11 +30,11 @@
             const keyword = document.getElementById('keyword').value;
             document.getElementById('status').innerText = 'Už se to hledá...';
             document.getElementById('download-container').style.display = 'none';
-            document.getElementById('results-container').innerHTML = ''; // Čistí předchozí výsledky
+            document.getElementById('results-container').innerHTML = '';
 
             try {
                const response = await fetch('https://ra-ini.onrender.com/scrape', {
-                    method: 'POST', // Zajistí, že požadavek je typu POST
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -74,7 +74,6 @@
 
                     resultsContainer.appendChild(table);
 
-                    // Nastaví URL pro stažení CSV
                     const url = window.URL.createObjectURL(blob);
                     const downloadBtn = document.getElementById('download-btn');
                     downloadBtn.href = url;
