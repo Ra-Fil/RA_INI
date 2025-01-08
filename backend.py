@@ -24,7 +24,7 @@ def scrape_google():
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
-    url = f"https://www.google.com/search?q={keyword}&num=10"
+    url = f"https://www.google.cz/search?q={keyword}&num=10"
     
     response = requests.get(url, headers=headers)
 
