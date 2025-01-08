@@ -8,6 +8,7 @@ import os
 
 app = Flask(__name__)
 
+# Povolení CORS pouze pro frontend na GitHub Pages
 CORS(app, origins=["https://ra-fil.github.io"])
 
 @app.route('/', methods=['GET'])
@@ -53,4 +54,13 @@ def scrape_google():
     with open(file_path, 'w', encoding='utf-8', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['Title', 'Link', 'Meta Description'])
-        for result in re
+        for result in results:
+            writer.writerow([result['title'], result['link'], result['meta_description']])
+
+    # Vrácení CSV souboru jako odpověď
+    return send_file(file_path, as_attachment=True)
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
+
