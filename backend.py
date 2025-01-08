@@ -25,10 +25,14 @@ def scrape_google():
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
     url = f"https://www.google.com/search?q={keyword}&num=10"
+    
     response = requests.get(url, headers=headers)
 
     if response.status_code != 200:
         return jsonify({"error": "Failed to fetch results from Google"}), 500
+
+return response.text  # Dočasné vrácení odpovědi jako text
+    
 
     soup = BeautifulSoup(response.text, 'html.parser')
     results = []
