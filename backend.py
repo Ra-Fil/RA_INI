@@ -31,9 +31,6 @@ def scrape_google():
     if response.status_code != 200:
         return jsonify({"error": "Failed to fetch results from Google"}), 500
 
-return response.text  # Dočasné vrácení odpovědi jako text
-    
-
     soup = BeautifulSoup(response.text, 'html.parser')
     results = []
 
