@@ -35,7 +35,6 @@ def scrape_google():
     soup = BeautifulSoup(response.text, 'html.parser')
     results = []
 
-    # Cyklus pro extrakci výsledků
     for g in soup.find_all('div', class_='tF2Cxc'):
         title = g.find('h3').text if g.find('h3') else 'No title'
         link = g.find('a')['href'] if g.find('a') else 'No link'
@@ -57,7 +56,6 @@ def scrape_google():
         for result in results:
             writer.writerow([result['title'], result['link'], result['meta_description']])
 
-    # Vrácení CSV souboru jako odpověď
     return send_file(file_path, as_attachment=True)
 
 if __name__ == '__main__':
