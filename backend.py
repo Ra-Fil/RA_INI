@@ -33,8 +33,7 @@ def scrape_google():
         return jsonify({"error": "Failed to fetch results from Google"}), 500
 
    
-    soup = BeautifulSoup(response.text, 'lxml')
-
+    soup = BeautifulSoup(response.text, 'html.parser')
     results = []
 
     for g in soup.find_all('div', class_='tF2Cxc'):
